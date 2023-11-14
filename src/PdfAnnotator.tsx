@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { IHighlight, Comment } from "./types";
 import PdfLoader from "./components/PdfLoader";
 import { Spinner } from "./components/Spinner";
@@ -33,7 +33,7 @@ export function PdfAnnotator({
     let win = window as any;
     let node = win.PdfViewer.viewer.getPageView(0)?.div;
     let container = win.PdfViewer?.viewer?.container;
-
+    console.log(container, node);
     if (container?.scrollLeft && node) {
       const pageBoundingClientRect = node.getBoundingClientRect();
       let left = container.scrollLeft;
@@ -45,14 +45,15 @@ export function PdfAnnotator({
     let win = window as any;
     let node = win.PdfViewer.viewer.getPageView(0)?.div;
     let container = win.PdfViewer?.viewer?.container;
-
+    console.log(container, node);
     if (container?.scrollLeft && node) {
       const pageBoundingClientRect = node.getBoundingClientRect();
       let left = container.scrollLeft;
-
-      container.scrollLeft = left - pageBoundingClientRect.width;
+      let res = left - pageBoundingClientRect.width;
+      container.scrollLeft = Math.max(typeof res != "number" ? 0 : res, 5);
     }
   };
+
   return (
     <div style={{ height: "100%", width: "100%", position: "relative" }}>
       <PdfLoader url={pdfSrc} beforeLoad={<Spinner />}>
@@ -95,8 +96,9 @@ export function PdfAnnotator({
                     });
                     hideTipAndSelection();
                   }}
-                  onShareQuoteClick={(s) => {
-                    onShareQuote?.(s);
+                  onShareQuoteClick={() => {
+                    onShareQuote?.(content.text || "");
+                    hideTipAndSelection();
                   }}
                 />
               );
@@ -109,97 +111,20 @@ export function PdfAnnotator({
               viewportToScaled,
               screenshot,
               isScrolledTo
-            ) => {
-              const isTextHighlight = !Boolean(
-                highlight.content && highlight.content.image
-              );
-
-              const component = isTextHighlight ? (
-                <Highlight
-                  isScrolledTo={isScrolledTo}
-                  position={highlight.position}
-                  comment={highlight.comment}
-                />
-              ) : (
-                <AreaHighlight
-                  isScrolledTo={isScrolledTo}
-                  highlight={highlight}
-                  onChange={(boundingRect) => {
-                    // this.updateHighlight(
-                    //   highlight.id,
-                    //   { boundingRect: viewportToScaled(boundingRect) },
-                    //   { image: screenshot(boundingRect) }
-                    // );
-                  }}
-                />
-              );
-
-              const [note, setNote] = useState(false);
-
-              return (
-                <Popup
-                  popupContent={
-                    highlight?.comment?.text ? (
-                      <HighlightPopup
-                        comment={highlight?.comment}
-                        onDeleteClick={() => {
-                          onDeleteHighlight?.(highlight.id);
-                          hideTip();
-                        }}
-                        onEditClick={() => {
-                          hideTip();
-                          setNote(true);
-                          setTip(highlight, (highlight) => (
-                            <NotePopup
-                              onEnd={() => setNote(false)}
-                              comment={highlight.comment}
-                              onUpdateData={(newComment) => {
-                                console.log("Test onUpdate 2");
-                                hideTip();
-                                setNote(false);
-                                onUpdateHighlight?.(highlight.id, newComment);
-                              }}
-                            />
-                          ));
-                        }}
-                      />
-                    ) : (
-                      <HighlightTip
-                        onDelete={() => {
-                          onDeleteHighlight?.(highlight.id);
-                          hideTip();
-                        }}
-                        handleNote={() => {
-                          hideTip();
-                          setNote(true);
-                          setTip(highlight, (highlight) => (
-                            <NotePopup
-                              onEnd={() => setNote(false)}
-                              comment={highlight.comment}
-                              onUpdateData={(newComment) => {
-                                console.log("Test onUpdate");
-                                hideTip();
-                                setNote(false);
-                                onUpdateHighlight?.(highlight.id, newComment);
-                              }}
-                            />
-                          ));
-                        }}
-                        onShare={() => {
-                          onShareQuote?.(highlight.comment.text);
-                        }}
-                      />
-                    )
-                  }
-                  onMouseOver={(popupContent) =>
-                    !note && setTip(highlight, (highlight) => popupContent)
-                  }
-                  onMouseOut={!note ? hideTip : () => {}}
-                  key={index}
-                  children={component}
-                />
-              );
-            }}
+            ) => (
+              <HighlightTransform
+                highlight={highlight}
+                index={index}
+                setTip={setTip}
+                hideTip={hideTip}
+                viewportToScaled={viewportToScaled}
+                screenshot={screenshot}
+                isScrolledTo={isScrolledTo}
+                onDeleteHighlight={onDeleteHighlight}
+                onUpdateHighlight={onUpdateHighlight}
+                onShareQuote={onShareQuote}
+              />
+            )}
             highlights={highlights}
           />
         )}
@@ -249,32 +174,145 @@ export function PdfAnnotator({
   );
 }
 
+class HighlightTransform extends React.Component<any, any> {
+  state = {
+    note: false,
+  };
+  render(): React.ReactNode {
+    const {
+      highlight,
+      index,
+      setTip,
+      hideTip,
+
+      isScrolledTo,
+      onDeleteHighlight,
+      onUpdateHighlight,
+      onShareQuote,
+    } = this.props;
+
+    const isTextHighlight = !Boolean(
+      highlight.content && highlight.content.image
+    );
+
+    const component = isTextHighlight ? (
+      <Highlight
+        isScrolledTo={isScrolledTo}
+        position={highlight.position}
+        comment={highlight.comment}
+      />
+    ) : (
+      <AreaHighlight
+        isScrolledTo={isScrolledTo}
+        highlight={highlight}
+        onChange={(boundingRect) => {
+          // this.updateHighlight(
+          //   highlight.id,
+          //   { boundingRect: viewportToScaled(boundingRect) },
+          //   { image: screenshot(boundingRect) }
+          // );
+        }}
+      />
+    );
+
+    const { note } = this.state;
+
+    const setNote = (d: boolean) => {
+      this.setState({ note: d });
+    };
+
+    return (
+      <Popup
+        popupContent={
+          highlight?.comment?.text ? (
+            <HighlightPopup
+              comment={highlight?.comment}
+              onDeleteClick={() => {
+                onDeleteHighlight?.(highlight.id);
+                hideTip();
+              }}
+              onEditClick={() => {
+                // hideTip();
+                setNote(true);
+                setTip(highlight, (highlight: any) => (
+                  <NotePopup
+                    onEnd={() => setNote(false)}
+                    comment={highlight.comment}
+                    onUpdateData={(newComment) => {
+                      console.log("Test onUpdate 2");
+                      hideTip();
+                      setNote(false);
+                      onUpdateHighlight?.(highlight.id, newComment);
+                    }}
+                  />
+                ));
+              }}
+            />
+          ) : (
+            <HighlightTip
+              onDelete={() => {
+                onDeleteHighlight?.(highlight.id);
+                hideTip();
+              }}
+              handleNote={() => {
+                hideTip();
+                setNote(true);
+                setTip(highlight, (highlight: any) => (
+                  <NotePopup
+                    onEnd={() => setNote(false)}
+                    comment={highlight.comment}
+                    onUpdateData={(newComment) => {
+                      console.log("Test onUpdate");
+                      hideTip();
+                      setNote(false);
+                      onUpdateHighlight?.(highlight.id, newComment);
+                    }}
+                  />
+                ));
+              }}
+              onShare={() => {
+                onShareQuote?.(highlight?.content?.text || "");
+                hideTip();
+              }}
+            />
+          )
+        }
+        onMouseOver={(popupContent) =>
+          !note && setTip(highlight, (highlight: any) => popupContent)
+        }
+        onMouseOut={!note ? hideTip : () => {}}
+        key={index}
+        children={component}
+      />
+    );
+  }
+}
+
 type NotePopupProps = {
   onEnd: () => any;
   comment: Comment;
   onUpdateData: (c: Comment) => any;
 };
 
-function NotePopup({ onEnd, comment, onUpdateData }: NotePopupProps) {
-  {
-    const [text, setText] = useState(comment?.text || "");
+class NotePopup extends React.Component<NotePopupProps, { text: string }> {
+  state = {
+    text: this.props?.comment?.text || "",
+  };
 
-    useEffect(() => {
-      return () => {
-        onEnd();
-      };
-    }, []);
+  componentWillUnmount(): void {
+    this.props.onEnd();
+  }
 
-    console.log(text, "hello");
-
+  render(): React.ReactNode {
+    let { onUpdateData } = this.props;
     return (
       <div className="Tip">
         <div className="Tip__card">
           <div>
             <textarea
-              value={text}
+              value={this.state.text}
               onChange={(e) => {
-                setText(e.target.value);
+                this.setState({ text: e.target.value });
               }}
               placeholder="Your comment"
               autoFocus
@@ -284,8 +322,7 @@ function NotePopup({ onEnd, comment, onUpdateData }: NotePopupProps) {
             <button
               type="button"
               onClick={() => {
-                console.log("TESTING BUTTOn");
-                onUpdateData({ ...comment, text });
+                onUpdateData({ emoji: "📝", text: this.state.text });
               }}
             >
               Update

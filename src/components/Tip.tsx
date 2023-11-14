@@ -14,7 +14,7 @@ interface Props {
   onOpen: () => void;
   onUpdate?: () => void;
   onHighLightClick?: () => any;
-  onShareQuoteClick?: (s: string) => any;
+  onShareQuoteClick?: () => any;
 }
 
 export class Tip extends Component<Props, State> {
@@ -64,7 +64,7 @@ export class Tip extends Component<Props, State> {
               className="Tip__compact"
               onClick={() => {
                 onOpen();
-                this.props.onShareQuoteClick?.(this.state.text);
+                this.props.onShareQuoteClick?.();
               }}
             >
               Share Quote

@@ -34,6 +34,7 @@ function App() {
         highlights={highlights}
         onDeleteHighlight={deleteHighlight}
         onUpdateHighlight={updateHighlight}
+        isDualPageArrow
       />
     </div>
   );
