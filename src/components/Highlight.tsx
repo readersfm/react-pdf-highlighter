@@ -56,7 +56,7 @@ export class Highlight extends Component<Props> {
               key={index}
               style={rect}
               className={`Highlight__part`}
-            />
+            ></div>
           ))}
         </div>
       </div>

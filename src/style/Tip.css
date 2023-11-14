@@ -1,10 +1,19 @@
+.Tip__compact__wrapper {
+  display: flex;
+  align-items: center;
+}
 .Tip__compact {
   cursor: pointer;
   background-color: #3d464d;
+
   border: 1px solid rgba(255, 255, 255, 0.25);
   color: white;
   padding: 5px 10px;
   border-radius: 3px;
+  font-size: 14px;
+}
+.Tip__compact:hover {
+  background-color: rgb(108, 124, 136);
 }
 
 .Tip__card {
@@ -25,4 +34,16 @@
 .Tip__card input[type="submit"] {
   margin-top: 5px;
   font-size: large;
+}
+
+.Test__tip {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  background-color: red;
+  z-index: 99999;
+}
+
+.Tip__card_absolute {
+  position: absolute;
 }

@@ -28,15 +28,35 @@ html
 }
 
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-  .textLayer {opacity: 0.5;}
+  .textLayer {
+    opacity: 0.5;
+  }
 }
 
 /* Internet Explorer support method */
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
-  .textLayer {opacity: 0.5 }
+  .textLayer {
+    opacity: 0.5;
+  }
 }
 
 /* Microsoft Edge Browser 12+ (All) - @supports method */
-@supports (-ms-ime-align:auto) {
-  .textLayer {opacity: 0.5 }
+@supports (-ms-ime-align: auto) {
+  .textLayer {
+    opacity: 0.5;
+  }
+}
+
+.dual_page_arrow {
+  position: absolute;
+  top: 50%;
+  opacity: 0.5;
+  transition: all 0.5s;
+  z-index: 99;
+  cursor: pointer;
+  transform: translateY(-50%);
+}
+
+.dual_page_arrow:hover {
+  opacity: 1;
 }

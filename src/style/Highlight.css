@@ -6,7 +6,7 @@
   position: absolute;
   color: black;
   opacity: 1;
-  font-size: 28px;
+  font-size: 24px;
 }
 
 .Highlight__parts {
@@ -26,11 +26,29 @@
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 3px;
+  min-width: 150px;
   max-width: 300px;
   max-height: 100px;
-  overflow-y: scroll;
+  overflow-y: auto;
+}
+
+.Highlight__popup__dialog {
+  position: absolute;
+  left: 0;
+  bottom: -33px;
+  background-color: #3d464d;
+  display: flex;
+  align-items: center;
+  padding: 5px 8px;
+  gap: 10px;
 }
 
 .Highlight--scrolledTo .Highlight__part {
   background: #ff4141;
+}
+
+.hightlight__hover-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }

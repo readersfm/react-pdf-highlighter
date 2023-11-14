@@ -22,13 +22,13 @@
     "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:copy-styles && npm run build:example",
     "build:esm": "tsc",
     "build:cjs": "tsc --module commonjs --outDir ./dist/cjs",
-    "build:copy-styles": "cp -r ./src/style ./dist/esm; cp -r ./src/style ./dist/cjs",
+    "build:copy-styles": "shx cp -r ./src/style ./dist/esm && shx cp -r ./src/style ./dist/cjs",
     "build:example": "(cd ./example && tsc && vite build)",
     "test": "tsc && npm run format:check && npm run test:integration",
     "test:integration": "BROWSER=none jest --maxWorkers=1 -c jest.config.js",
     "format": "prettier --write './**/*.{js,ts,tsx}'",
     "format:check": "prettier --check './**/*.{js,ts,tsx}'",
-    "clean": "rm -rf dist"
+    "clean": "shx rm -rf dist"
   },
   "peerDependencies": {
     "react": ">=18.0.0",
@@ -37,7 +37,9 @@
   "dependencies": {
     "lodash.debounce": "^4.0.8",
     "pdfjs-dist": "2.16.105",
-    "react-rnd": "^10.1.10"
+    "react-rnd": "^10.1.10",
+    "rswitch": "^0.4.0",
+    "shx": "^0.3.4"
   },
   "repository": {
     "type": "git",

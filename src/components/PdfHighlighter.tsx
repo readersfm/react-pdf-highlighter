@@ -30,6 +30,7 @@ import MouseSelection from "./MouseSelection";
 import type { PDFDocumentProxy } from "pdfjs-dist";
 import TipContainer from "./TipContainer";
 import { createRoot, Root } from "react-dom/client";
+import ReactDOM from "react-dom";
 import debounce from "lodash.debounce";
 import getAreaAsPng from "../lib/get-area-as-png";
 import getBoundingRect from "../lib/get-bounding-rect";
@@ -351,20 +352,41 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
       pageNumber: page.pageNumber,
     };
 
+    page.node.style.position = "relative";
+
     return (
-      <TipContainer
-        scrollTop={this.viewer.container.scrollTop}
-        pageBoundingRect={pageBoundingRect}
-        style={{
-          left:
-            page.node.offsetLeft + boundingRect.left + boundingRect.width / 2,
-          top: boundingRect.top + page.node.offsetTop,
-          bottom: boundingRect.top + page.node.offsetTop + boundingRect.height,
-        }}
-      >
-        {tipChildren}
-      </TipContainer>
+      <>
+        {ReactDOM.createPortal(
+          <TipContainer
+            scrollTop={this.viewer.container.scrollTop}
+            pageBoundingRect={pageBoundingRect}
+            style={{
+              left: boundingRect.left + boundingRect.width / 2,
+              top: boundingRect.top,
+            }}
+          >
+            {tipChildren}
+          </TipContainer>,
+          page.node,
+          "this is react"
+        )}
+      </>
     );
+
+    // return (
+    // <TipContainer
+    //   scrollTop={this.viewer.container.scrollTop}
+    //   pageBoundingRect={pageBoundingRect}
+    //   style={{
+    //     left:
+    //       page.node.offsetLeft + boundingRect.left + boundingRect.width / 2,
+    //     top: boundingRect.top + page.node.offsetTop,
+    //     bottom: boundingRect.top + page.node.offsetTop + boundingRect.height,
+    //   }}
+    // >
+    //   {tipChildren}
+    // </TipContainer>
+    // );
   };
 
   onTextLayerRendered = () => {
@@ -606,7 +628,6 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
                     { image },
                     () => this.hideTipAndSelection(),
                     () => {
-                      console.log("setting ghost highlight", scaledPosition);
                       this.setState(
                         {
                           ghostHighlight: {
@@ -654,6 +675,7 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
   private renderHighlightLayer(root: Root, pageNumber: number) {
     const { highlightTransform, highlights } = this.props;
     const { tip, scrolledToHighlightId } = this.state;
+
     root.render(
       <HighlightLayer
         highlightsByPage={this.groupHighlightsByPage(highlights)}

@@ -9,7 +9,7 @@ interface State {
 
 interface Props {
   children: JSX.Element | null;
-  style: { top: number; left: number; bottom: number };
+  style: { top: number; left: number };
   scrollTop: number;
   pageBoundingRect: LTWHP;
 }
@@ -57,7 +57,7 @@ class TipContainer extends Component<Props, State> {
 
     const shouldMove = style.top - height - 5 < scrollTop;
 
-    const top = shouldMove ? style.bottom + 5 : style.top - height - 5;
+    const top = style.top - height - 5;
 
     const left = clamp(
       style.left - width / 2,
