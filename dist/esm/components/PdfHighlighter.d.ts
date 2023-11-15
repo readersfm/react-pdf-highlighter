@@ -49,6 +49,7 @@ export declare class PdfHighlighter<T_HT extends IHighlight> extends PureCompone
     eventBus: EventBus;
     linkService: PDFLinkService;
     viewer: PDFViewer;
+    _PREV_SCALE_: string | number | undefined;
     resizeObserver: ResizeObserver | null;
     containerNode?: HTMLDivElement | null;
     containerNodeRef: RefObject<HTMLDivElement>;

@@ -7,7 +7,7 @@ import Highlight from "./components/Highlight";
 import AreaHighlight from "./components/AreaHighlight";
 import Popup from "./components/Popup";
 const getNextId = () => String(Math.random()).slice(2);
-export function PdfAnnotator({ pdfSrc, highlights = [], onNewHightlight, onShareQuote, onDeleteHighlight, onUpdateHighlight, isDualPageArrow, }) {
+export function PdfAnnotator({ pdfSrc, highlights = [], onNewHightlight, onShareQuote, onDeleteHighlight, onUpdateHighlight, isDualPageArrow, pdfScaleValue, }) {
     const handleNextPage = () => {
         var _a, _b, _c;
         let win = window;
@@ -62,7 +62,7 @@ export function PdfAnnotator({ pdfSrc, highlights = [], onNewHightlight, onShare
                         onShareQuote === null || onShareQuote === void 0 ? void 0 : onShareQuote(content.text || "");
                         hideTipAndSelection();
                     } }));
-            }, highlightTransform: (highlight, index, setTip, hideTip, viewportToScaled, screenshot, isScrolledTo) => (React.createElement(HighlightTransform, { highlight: highlight, index: index, setTip: setTip, hideTip: hideTip, viewportToScaled: viewportToScaled, screenshot: screenshot, isScrolledTo: isScrolledTo, onDeleteHighlight: onDeleteHighlight, onUpdateHighlight: onUpdateHighlight, onShareQuote: onShareQuote })), highlights: highlights }))),
+            }, highlightTransform: (highlight, index, setTip, hideTip, viewportToScaled, screenshot, isScrolledTo) => (React.createElement(HighlightTransform, { highlight: highlight, index: index, setTip: setTip, hideTip: hideTip, viewportToScaled: viewportToScaled, screenshot: screenshot, isScrolledTo: isScrolledTo, onDeleteHighlight: onDeleteHighlight, onUpdateHighlight: onUpdateHighlight, onShareQuote: onShareQuote })), highlights: highlights, pdfScaleValue: String(pdfScaleValue) }))),
         isDualPageArrow && (React.createElement(React.Fragment, null,
             React.createElement("div", { style: { right: 10 }, onClick: handleNextPage, className: "dual_page_arrow" },
                 React.createElement("svg", { width: "50", height: "50", viewBox: "0 0 125 125", fill: "none", xmlns: "http://www.w3.org/2000/svg" },

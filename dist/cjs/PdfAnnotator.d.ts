@@ -8,6 +8,7 @@ type Props = {
     onDeleteHighlight?: (id: string) => any;
     onUpdateHighlight?: (id: string, comment: Comment) => any;
     isDualPageArrow?: boolean;
+    pdfScaleValue?: string | number;
 };
-export declare function PdfAnnotator({ pdfSrc, highlights, onNewHightlight, onShareQuote, onDeleteHighlight, onUpdateHighlight, isDualPageArrow, }: Props): JSX.Element;
+export declare function PdfAnnotator({ pdfSrc, highlights, onNewHightlight, onShareQuote, onDeleteHighlight, onUpdateHighlight, isDualPageArrow, pdfScaleValue, }: Props): JSX.Element;
 export default PdfAnnotator;

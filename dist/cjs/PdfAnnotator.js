@@ -36,7 +36,7 @@ const Highlight_1 = __importDefault(require("./components/Highlight"));
 const AreaHighlight_1 = __importDefault(require("./components/AreaHighlight"));
 const Popup_1 = __importDefault(require("./components/Popup"));
 const getNextId = () => String(Math.random()).slice(2);
-function PdfAnnotator({ pdfSrc, highlights = [], onNewHightlight, onShareQuote, onDeleteHighlight, onUpdateHighlight, isDualPageArrow, }) {
+function PdfAnnotator({ pdfSrc, highlights = [], onNewHightlight, onShareQuote, onDeleteHighlight, onUpdateHighlight, isDualPageArrow, pdfScaleValue, }) {
     const handleNextPage = () => {
         var _a, _b, _c;
         let win = window;
@@ -91,7 +91,7 @@ function PdfAnnotator({ pdfSrc, highlights = [], onNewHightlight, onShareQuote, 
                         onShareQuote === null || onShareQuote === void 0 ? void 0 : onShareQuote(content.text || "");
                         hideTipAndSelection();
                     } }));
-            }, highlightTransform: (highlight, index, setTip, hideTip, viewportToScaled, screenshot, isScrolledTo) => (react_1.default.createElement(HighlightTransform, { highlight: highlight, index: index, setTip: setTip, hideTip: hideTip, viewportToScaled: viewportToScaled, screenshot: screenshot, isScrolledTo: isScrolledTo, onDeleteHighlight: onDeleteHighlight, onUpdateHighlight: onUpdateHighlight, onShareQuote: onShareQuote })), highlights: highlights }))),
+            }, highlightTransform: (highlight, index, setTip, hideTip, viewportToScaled, screenshot, isScrolledTo) => (react_1.default.createElement(HighlightTransform, { highlight: highlight, index: index, setTip: setTip, hideTip: hideTip, viewportToScaled: viewportToScaled, screenshot: screenshot, isScrolledTo: isScrolledTo, onDeleteHighlight: onDeleteHighlight, onUpdateHighlight: onUpdateHighlight, onShareQuote: onShareQuote })), highlights: highlights, pdfScaleValue: String(pdfScaleValue) }))),
         isDualPageArrow && (react_1.default.createElement(react_1.default.Fragment, null,
             react_1.default.createElement("div", { style: { right: 10 }, onClick: handleNextPage, className: "dual_page_arrow" },
                 react_1.default.createElement("svg", { width: "50", height: "50", viewBox: "0 0 125 125", fill: "none", xmlns: "http://www.w3.org/2000/svg" },

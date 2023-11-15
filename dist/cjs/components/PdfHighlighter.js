@@ -373,6 +373,11 @@ class PdfHighlighter extends react_1.PureComponent {
     }
     render() {
         const { onSelectionFinished, enableAreaSelection } = this.props;
+        if (this.props.pdfScaleValue !== this._PREV_SCALE_) {
+            this._PREV_SCALE_ = this.props.pdfScaleValue;
+            this.handleScaleValue();
+            console.log("zoomed");
+        }
         return (react_1.default.createElement("div", { onPointerDown: this.onMouseDown },
             react_1.default.createElement("div", { ref: this.containerNodeRef, className: "PdfHighlighter", onContextMenu: (e) => e.preventDefault() },
                 react_1.default.createElement("div", { className: "pdfViewer" }),
