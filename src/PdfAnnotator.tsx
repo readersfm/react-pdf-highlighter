@@ -18,6 +18,7 @@ type Props = {
   onDeleteHighlight?: (id: string) => any;
   onUpdateHighlight?: (id: string, comment: Comment) => any;
   isDualPageArrow?: boolean;
+  pdfScaleValue?: string | number;
 };
 
 export function PdfAnnotator({
@@ -28,6 +29,7 @@ export function PdfAnnotator({
   onDeleteHighlight,
   onUpdateHighlight,
   isDualPageArrow,
+  pdfScaleValue,
 }: Props) {
   const handleNextPage = () => {
     let win = window as any;
@@ -126,6 +128,7 @@ export function PdfAnnotator({
               />
             )}
             highlights={highlights}
+            pdfScaleValue={String(pdfScaleValue)}
           />
         )}
       </PdfLoader>

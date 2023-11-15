@@ -112,6 +112,8 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
 
   viewer!: PDFViewer;
 
+  _PREV_SCALE_: string | number | undefined;
+
   resizeObserver: ResizeObserver | null = null;
   containerNode?: HTMLDivElement | null = null;
   containerNodeRef: RefObject<HTMLDivElement>;
@@ -571,6 +573,12 @@ export class PdfHighlighter<T_HT extends IHighlight> extends PureComponent<
 
   render() {
     const { onSelectionFinished, enableAreaSelection } = this.props;
+
+    if (this.props.pdfScaleValue !== this._PREV_SCALE_) {
+      this._PREV_SCALE_ = this.props.pdfScaleValue;
+      this.handleScaleValue();
+      console.log("zoomed");
+    }
 
     return (
       <div onPointerDown={this.onMouseDown}>
