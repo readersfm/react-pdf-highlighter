@@ -4,7 +4,7 @@ export function Spinner() {
     return (React.createElement("div", { style: {
             display: "flex",
             alignItems: "center",
-            height: "100vh",
+            height: "100%",
         } },
         React.createElement("div", { className: "sk-fading-circle" },
             React.createElement("div", { className: "sk-circle1 sk-circle" }),

@@ -10,7 +10,7 @@ function Spinner() {
     return (react_1.default.createElement("div", { style: {
             display: "flex",
             alignItems: "center",
-            height: "100vh",
+            height: "100%",
         } },
         react_1.default.createElement("div", { className: "sk-fading-circle" },
             react_1.default.createElement("div", { className: "sk-circle1 sk-circle" }),
