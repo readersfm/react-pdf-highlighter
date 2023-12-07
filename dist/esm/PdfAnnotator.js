@@ -34,7 +34,11 @@ export function PdfAnnotator({ pdfSrc, highlights = [], onNewHightlight, onShare
         }
     };
     return (React.createElement("div", { style: { height: "100%", width: "100%", position: "relative" } },
-        React.createElement(PdfLoader, { url: pdfSrc, beforeLoad: React.createElement(Spinner, null) }, (pdfDocument) => (React.createElement(PdfHighlighter, { pdfDocument: pdfDocument, enableAreaSelection: (event) => event.altKey, onScrollChange: () => {
+        React.createElement(PdfLoader, { url: pdfSrc, beforeLoad: React.createElement(Spinner, null), onError: () => {
+                if (typeof window != "undefined") {
+                    window.location.reload();
+                }
+            } }, (pdfDocument) => (React.createElement(PdfHighlighter, { pdfDocument: pdfDocument, enableAreaSelection: (event) => event.altKey, onScrollChange: () => {
                 document.location.hash = "";
             }, 
             // pdfScaleValue="page-width"

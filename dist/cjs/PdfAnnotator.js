@@ -63,7 +63,11 @@ function PdfAnnotator({ pdfSrc, highlights = [], onNewHightlight, onShareQuote, 
         }
     };
     return (react_1.default.createElement("div", { style: { height: "100%", width: "100%", position: "relative" } },
-        react_1.default.createElement(PdfLoader_1.default, { url: pdfSrc, beforeLoad: react_1.default.createElement(Spinner_1.Spinner, null) }, (pdfDocument) => (react_1.default.createElement(PdfHighlighter_1.PdfHighlighter, { pdfDocument: pdfDocument, enableAreaSelection: (event) => event.altKey, onScrollChange: () => {
+        react_1.default.createElement(PdfLoader_1.default, { url: pdfSrc, beforeLoad: react_1.default.createElement(Spinner_1.Spinner, null), onError: () => {
+                if (typeof window != "undefined") {
+                    window.location.reload();
+                }
+            } }, (pdfDocument) => (react_1.default.createElement(PdfHighlighter_1.PdfHighlighter, { pdfDocument: pdfDocument, enableAreaSelection: (event) => event.altKey, onScrollChange: () => {
                 document.location.hash = "";
             }, 
             // pdfScaleValue="page-width"
